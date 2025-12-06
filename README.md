@@ -1,0 +1,2 @@
+# hyprconf
+Hyprland Config
