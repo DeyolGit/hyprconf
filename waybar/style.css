@@ -1,0 +1,151 @@
+* {
+    font-family: "Fira Sans Semibold", FontAwesome, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    transition: background-color .3s ease-out;
+}
+
+window#waybar {
+    background: transparent;
+    color: #c0caf5;
+    font-family: 
+        SpaceMono Nerd Font,
+        feather;
+    transition: background-color .5s;
+}
+#waybar {
+    margin: 0;
+}
+.modules-left,
+.modules-center,
+.modules-right
+{
+    background: rgba(0, 0, 8, .5);
+    margin: 5px 5px;
+    padding: 5px 5px;
+    border-radius: 15px;
+}
+
+
+.modules-left {
+    padding: 0;
+}
+.modules-center {
+    padding: 0 10px;
+}
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio {
+    transition: color .5s;
+    padding: 0 5px;
+}
+#pulseaudio:hover {
+    color: #1793d1;
+}
+#wireplumber,
+#custom-media,
+#tray,
+#mode,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#language {
+    margin-right: 10px;
+    transition: color .5s;
+    font-size: 16;
+}
+#mpd {
+    padding: 0 10px;
+    border-radius: 15px;
+}
+
+#clock:hover,
+#battery:hover,
+#cpu:hover,
+#memory:hover,
+#disk:hover,
+#temperature:hover,
+#backlight:hover,
+#network:hover,
+#pulseaudio:hover,
+#wireplumber:hover,
+#custom-media:hover,
+#tray:hover,
+#mode:hover,
+#idle_inhibitor:hover,
+#scratchpad:hover,
+#power-profiles-daemon:hover,
+#language:hover {
+    color: #1793d1;
+}
+#mpd:hover {
+    background: rgba(26, 27, 38, 0.9);
+}
+
+
+#workspaces button {
+  background: transparent;
+  font-family:
+    SpaceMono Nerd Font,
+    feather;
+  font-weight: 900;
+  font-size: 13pt;
+  color: #c0caf5;
+  border:none;
+  border-radius: 15px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+#workspaces button.active {
+    background: #c0caf5;
+    color: #13131d;
+    min-width: 40px;
+    transition: min-width .6s ease;
+}
+#workspaces button.active:hover {
+  background: #c0caf5;
+  color: #13131d;
+}
+#workspaces button:hover {
+  background: #adadad;
+  color: #cdd6f4;
+  box-shadow: none;
+}
+
+#custom-arch {
+    margin-left: 9px;
+    margin-right: 7px;
+    margin-bottom: 1px;
+    padding: 0 5px;
+    font-size: 24px;
+    transition: color .5s;
+}
+#custom-arch:hover {
+    color: #1793d1;
+}
+#bluetooth {
+    font-size: 17px;
+    margin-left: 6px;
+    transition: color .5s;
+}
+#bluetooth:hover {
+    color: #1793d1;
+}
+
+#network {
+    margin-left: 4px;
+    transition: color .5s;
+}
+#network:hover {
+    color: #1793d1;
+}
+#window {
+    margin-right: 15px;
+}

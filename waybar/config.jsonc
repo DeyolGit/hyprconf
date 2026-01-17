@@ -1,0 +1,33 @@
+
+{
+    "layer": "top",
+    "position": "top",
+    "height": 0,
+    "spacing": 4, 
+    "modules-left": [
+        "custom/arch",
+        "hyprland/window"
+        
+    ],
+    "modules-center": [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "cpu",
+        "memory",
+        "temperature",
+        "pulseaudio",
+        "bluetooth",
+        "network",
+        "battery",
+        "battery#bat2",
+        "clock",
+        "hyprland/language",
+        "shutdown"
+    ],
+
+
+    "include": [
+		"~/.config/waybar/modules.json"
+	]
+}
