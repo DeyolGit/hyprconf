@@ -1,6 +1,3 @@
-oh-my-posh init fish --config $HOME/.config/fish/completions/amro.omp.json | source
+oh-my-posh init fish --config 'https://github.com/JanDeDobbeleer/oh-my-posh/blob/main/themes/avit.omp.json' | source
+fastfetch
 set -g fish_greeting ""
-fastfetch --logo-type kitty-direct --logo ~/tux.png --logo-width 33 --logo-height 15
-if status is-interactive
-    # Commands to run in interactive sessions can go here
-end
