@@ -6,7 +6,7 @@
   "height": 0,
   "margin-top": 2,
   "margin-left": 5,
-  "margin-right": 5,
+  "margin-right": 6,
   "margin-bottom": 0,
   "modules-left": [
     "custom/omarchy",
@@ -15,9 +15,8 @@
     "custom/separator",
     "cpu",
     "memory",
-    "custom/separator",
-    "idle_inhibitor",
-    "mpris"
+    "custom/separator"
+    
   ],
   "modules-center": [
     "clock",
@@ -38,7 +37,7 @@
     "pulseaudio#output",
     "pulseaudio#input",
     "battery"
-  ],
+    ],
   "hyprland/workspaces": {
     "disable-scroll": true,
     "all-outputs": true,
@@ -69,19 +68,7 @@
     "signal": 7,
     "interval": 21600
   },
-   "custom/voxtype": {
-    "exec": "omarchy-voxtype-status",
-    "return-type": "json",
-    "format": "{icon}",
-    "format-icons": {
-      "idle": "",
-      "recording": "󰍬",
-      "transcribing": "󰔟"
-    },
-    "tooltip": true,
-    "on-click-right": "omarchy-voxtype-config",
-    "on-click": "omarchy-voxtype-model"
-  },
+   
     "custom/idle-indicator": {
     "on-click": "omarchy-toggle-idle",
     "exec": "$OMARCHY_PATH/default/waybar/indicators/idle.sh",
@@ -121,13 +108,13 @@
     },
   "memory": {
     "interval": 1,
-    "format": "RAM {icon}",
+    "format": "RAM {icon} {used}GB",
     "format-icons": ["󰝦","󰪞","󰪟","󰪠","󰪡","󰪢","󰪣","󰪤","󰪥"],
-    "max-length": 10,
+    "max-length": 12,
     "on-click": "omarchy-launch-or-focus-tui btop"
   },
   "clock": {
-    "format": "{:%A   %H:%M}",
+    "format": "{:%A     %H:%M}",
     "format-alt": "{:L%d %B W%V %Y}",
     "tooltip-format": "<span>{calendar}</span>",
     "calendar": {
@@ -203,6 +190,7 @@
       "critical": 10
     }
   },
+
   "bluetooth": {
     "format": "",
     "format-disabled": "󰂲",
@@ -211,20 +199,11 @@
     "on-click": "blueman-manager"
   },
   "pulseaudio#input": {
-    "format-source": "",
-    "format-source-muted": "",
-    "format": "{format_source}",
-    "tooltip-format": "{format_source} {source_volume}%",
-    "scroll-step": 1,
-    "smooth-scrolling-threshold": 1,
-    "max-volume": 100,
-    "on-click": "omarchy-launch-audio",
-    "on-click-right": "pamixer -t",
-    "on-scroll-up": "pactl set-source-volume @DEFAULT_SOURCE@ +1%",
-    "on-scroll-down": "pactl set-source-volume @DEFAULT_SOURCE@ -1%"
+    "format": "",
+    "on-click": "nemu"
   },
   "pulseaudio#output": {
-    "format": "{icon}",
+    "format": "{icon}  {volume}%",
     "tooltip-format": "{icon}   {volume}%",
     "format-muted": "",
       "format-icons": {

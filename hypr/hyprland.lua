@@ -496,3 +496,9 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
 end)
+
+hl.env("HYPRCURSOR_THEME", "Adwaita")
+hl.env("HYPRCURSOR_SIZE", "13")
+
+hl.env("XCURSOR_THEME", "Adwaita")
+hl.env("XCURSOR_SIZE", "13")
