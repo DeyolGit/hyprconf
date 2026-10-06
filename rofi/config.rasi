@@ -1,153 +1,149 @@
-// Config //
 configuration {
-    modi:                        "drun,filebrowser,window,run";
-    show-icons:                  true;
-    display-drun:                " ";
-    display-run:                 " ";
-    display-filebrowser:         " ";
-    display-window:              " ";
-    drun-display-format:         "{name}";
-    window-format:               "{w}{t}";
-    font:                        "JetBrainsMono Nerd Font Propo 10";
-    icon-theme:                  "Papirus";
+    modi: "drun,run,window";
+    show-icons: true;
+
+    font: "JetBrainsMono Nerd Font 11";
+
+    drun-display-format: "{name}";
+    display-drun: "apps";
+    display-run: "run";
+    display-window: "windows";
+
+    sidebar-mode: false;
+    cycle: true;
+    hover-select: false;
+    scroll-method: 0;
+
+    matching: "fuzzy";
+    case-sensitive: false;
+
+    icon-theme: "Papirus-Dark";
+
+    timeout {
+        action: "kb-cancel";
+        delay: 0;
+    }
 }
 
-// Theme //
 * {
-    main-bg:            #242424; /* Base background */
-    main-fg:            #D8DEE9; /* Primary text */
-    main-br:            #FFFFFF; /* White border */
-    main-ex:            #D8DEE9; /* Accent highlights */
-    select-bg:          #333333; /* Slightly lighter background for selected items */
-    select-fg:          #D8DEE9; /* Text for selected items */
-    separatorcolor:     transparent;
-    border-color:       #FFFFFF; /* White border for window */
+    bg:        #2a2a2aa6;
+    bg-alt:    #ffffff18;
+    fg:        #eeeeee;
+    fg-dim:    #a0a0a0;
+    line:      #ffffff20;
+
+    border:    0px;
+    spacing:   0;
 }
 
-/* ---- Main Window ---- */
 window {
-    height:              31em;
-    width:               50em;
-    transparency:        "real";
-    fullscreen:          false;
-    enabled:             true;
-    cursor:              "default";
-    spacing:             0em;
-    padding:             0em;
-    border-radius:       5em;        /* Fully rounded */
-    border:              2px;         /* Border width */
-    border-color:        #FFFFFF;     /* White border */
-    background-color:    rgba(36,36,36,0.8); /* Semi-transparent dark background */
+    width: 620px;
+    location: center;
+
+    background-color: @bg;
+
+    border: 3px;
+    border-color: #c5c5c580;
+    border-radius: 16px;
+
+    padding: 24px;
 }
 
-/* Main box */
 mainbox {
-    enabled:             true;
-    spacing:             0em;
-    padding:             0em;
-    orientation:         vertical;
-    children:            [ "inputbar" , "listbox" , "mode-switcher" ];
-    background-color:    transparent;
+    children: [ inputbar, listview ];
+    spacing: 18px;
 }
 
-/* Input */
 inputbar {
-    enabled:             true;
-    children:            [ "entry" ];
+    children: [ prompt, entry ];
+
+    spacing: 12px;
+    padding: 0;
+
+    background-color: transparent;
 }
+
+prompt {
+    background-color: transparent;
+    text-color: @fg-dim;
+
+    font: "JetBrainsMono Nerd Font 10";
+}
+
 entry {
-    enabled:             false;
+    background-color: transparent;
+    text-color: @fg;
+
+    cursor: text;
+
+    placeholder: "search";
+    placeholder-color: @fg-dim;
+
+    padding: 0;
 }
 
-/* Lists */
-listbox {
-    padding:             0em;
-    spacing:             0em;
-    orientation:         horizontal;
-    children:            [ "listview" ];
-    background-color:    transparent;
-}
 listview {
-    padding:             2em;
-    spacing:             1em;
-    enabled:             true;
-    columns:             5;
-    cycle:               true;
-    dynamic:             true;
-    scrollbar:           false;
-    layout:              vertical;
-    reverse:             false;
-    fixed-height:        true;
-    fixed-columns:       true;
-    cursor:              "default";
-    background-color:    rgba(36,36,36,0.6); /* Slightly more transparent for depth */
-    text-color:          #D8DEE9;
+    columns: 1;
+    lines: 8;
+
+    fixed-height: true;
+    dynamic: false;
+
+    scrollbar: false;
+    spacing: 2px;
+
+    background-color: transparent;
 }
 
-/* Mode switcher */
-mode-switcher {
-    orientation:         horizontal;
-    enabled:             true;
-    padding:             2em 9.8em 2em 9.8em;
-    spacing:             2em;
-    background-color:    transparent;
-}
-
-/* Buttons */
-button {
-    cursor:              pointer;
-    padding:             2.5em;
-    spacing:             0em;
-    border-radius:       3em;      /* Fully rounded buttons */
-    background-color:    #242424;
-    text-color:          #D8DEE9;
-}
-button selected {
-    background-color:    #333333;
-    text-color:          #D8DEE9;
-}
-
-/* Elements */
 element {
-    orientation:         vertical;
-    enabled:             true;
-    spacing:             0.2em;
-    padding:             0.5em;
-    cursor:              pointer;
-    background-color:    rgba(36,36,36,0.5); /* Slight transparency for depth */
-    text-color:          #D8DEE9;
-    border-radius:       3em;      /* Fully rounded items */
+    orientation: horizontal;
+
+    padding: 9px 10px;
+    spacing: 12px;
+
+    background-color: transparent;
+    text-color: @fg;
+
+    border-radius: 9px;
 }
+
+element normal.normal {
+    background-color: transparent;
+    text-color: @fg;
+}
+
 element selected.normal {
-    background-color:    #333333;
-    text-color:          #D8DEE9;
+    background-color: @bg-alt;
+    text-color: @fg;
+
+    border-radius: 9px;
 }
-element-icon {
-    size:                5.5em;
-    cursor:              inherit;
-    background-color:    transparent;
-    text-color:          inherit;
+
+element alternate.normal {
+    background-color: transparent;
+    text-color: @fg;
 }
+
 element-text {
-    vertical-align:      0.5;
-    horizontal-align:    0.5;
-    cursor:              inherit;
-    background-color:    transparent;
-    text-color:          inherit;
+    background-color: transparent;
+    text-color: inherit;
+
+    vertical-align: 0.5;
 }
 
-/* Error messages */
-error-message {
-    text-color:          #D8DEE9;
-    background-color:    #242424;
-    text-transform:      capitalize;
-    children:            [ "textbox" ];
+element-icon {
+    size: 24px;
+
+    background-color: transparent;
+
+    vertical-align: 0.5;
 }
 
-textbox {
-    text-color:          inherit;
-    background-color:    inherit;
-    vertical-align:      0.5;
-    horizontal-align:    0.5;
+scrollbar {
+    width: 0px;
+    handle-width: 0px;
+
+    background-color: transparent;
+    handle-color: transparent;
 }
 
