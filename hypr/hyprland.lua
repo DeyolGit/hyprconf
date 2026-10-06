@@ -210,8 +210,15 @@ hl.curve("smooth", {
 	type = "bezier",
 	points = { { 0.05, 0.9 }, { 0.1, 1.0 } },
 })
+hl.curve("overshot", {
+	type = "bezier",
+	points = { { 0.13, 0.99 }, { 0.29, 1.00 } },
+})
 hl.animation({ leaf = "border", enabled = true, speed = 5.39, bezier = "easeOutQuint" })
-hl.animation({ leaf = "windows", enabled = true, speed = 4.79, bezier = "easeOutQuint" })
+
+hl.animation({ leaf = "windows", enabled = true, speed = 2, bezier = "overshot", style = "slide" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 5, bezier = "overshot", style = "slide" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 5, bezier = "overshot", style = "slide" })
 hl.animation({ leaf = "windowsIn", enabled = true, speed = 3, bezier = "quick", style = "popin 30%" })
 hl.animation({ leaf = "windowsOut", enabled = true, speed = 4.5, bezier = "quick", style = "popin 60%" })
 hl.animation({ leaf = "fadeIn", enabled = true, speed = 1.73, bezier = "almostLinear" })
@@ -222,9 +229,9 @@ hl.animation({ leaf = "layersIn", enabled = true, speed = 4, bezier = "easeOutQu
 hl.animation({ leaf = "layersOut", enabled = true, speed = 1.5, bezier = "linear", style = "fade" })
 hl.animation({ leaf = "fadeLayersIn", enabled = true, speed = 1.79, bezier = "almostLinear" })
 hl.animation({ leaf = "fadeLayersOut", enabled = true, speed = 1.39, bezier = "almostLinear" })
-hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "easeOutQuint", style = "slide" })
-hl.animation({ leaf = "workspacesIn", enabled = true, speed = 4, bezier = "easeOutQuint", style = "slide" })
-hl.animation({ leaf = "workspacesOut", enabled = true, speed = 4, bezier = "easeOutQuint", style = "slide" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 4.5, bezier = "easeOutQuint", style = "slide" })
+hl.animation({ leaf = "workspacesIn", enabled = true, speed = 4.5, bezier = "overshot", style = "slide" })
+hl.animation({ leaf = "workspacesOut", enabled = true, speed = 4, bezier = "overshot", style = "slide" })
 hl.animation({ leaf = "zoomFactor", enabled = true, speed = 7, bezier = "quick" })
 
 -- Ref https://wiki.hypr.land/Configuring/Workspace-Rules/
@@ -498,8 +505,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("hyprctl setcursor macOS 23")
 end)
 
-hl.env("HYPRCURSOR_THEME", "Adwaita")
-hl.env("HYPRCURSOR_SIZE", "13")
-
-hl.env("XCURSOR_THEME", "Adwaita")
-hl.env("XCURSOR_SIZE", "13")
+hl.window_rule({
+	match = { class = "^(org.gnome.Nautilus)$" },
+	opacity = "1 1",
+})
