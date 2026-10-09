@@ -1,3 +1,4 @@
+
 configuration {
     modi: "drun,run,window";
     show-icons: true;
@@ -26,11 +27,11 @@ configuration {
 }
 
 * {
-    bg:        #2a2a2aa6;
-    bg-alt:    #ffffff18;
-    fg:        #eeeeee;
-    fg-dim:    #a0a0a0;
-    line:      #ffffff20;
+    bg:        #282828e6;
+    bg-alt:    #fabd2f24;
+    fg:        #ebdbb2;
+    fg-dim:    #a89984;
+    line:      #504945;
 
     border:    0px;
     spacing:   0;
@@ -43,7 +44,7 @@ window {
     background-color: @bg;
 
     border: 3px;
-    border-color: #c5c5c580;
+    border-color: #665c54a0;
     border-radius: 16px;
 
     padding: 24px;
@@ -65,7 +66,7 @@ inputbar {
 
 prompt {
     background-color: transparent;
-    text-color: @fg-dim;
+    text-color: #fabd2f;
 
     font: "JetBrainsMono Nerd Font 10";
 }
@@ -114,7 +115,7 @@ element normal.normal {
 
 element selected.normal {
     background-color: @bg-alt;
-    text-color: @fg;
+    text-color: #fabd2f;
 
     border-radius: 9px;
 }

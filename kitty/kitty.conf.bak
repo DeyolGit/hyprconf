@@ -9,6 +9,7 @@ font_size 11.0
 # bold_italic_font auto
 
 background_opacity 0.4
+background_blur 1
 dynamic_background_opacity 1
 confirm_os_window_close 0
 start_as normal
@@ -31,7 +32,7 @@ window_padding_width 4
 # cursor #dddddd
 
 # BEGIN_KITTY_THEME
-# Ayu Mirage
+# Black Metal
 include current-theme.conf
 # END_KITTY_THEME
 

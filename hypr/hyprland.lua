@@ -151,8 +151,8 @@ hl.config({
 
 hl.config({
 	decoration = {
-		rounding = 10,
-		rounding_power = 2,
+		rounding = 5,
+		rounding_power = 1,
 		-- Change transparency of focused and unfocused windows
 		active_opacity = 1.0,
 		inactive_opacity = 0.85,
@@ -347,6 +347,8 @@ hl.bind(mainMod .. " + " .. "D", hl.dsp.exec_cmd("rofi -show"))
 hl.bind(mainMod .. " + " .. "V", hl.dsp.window.float())
 
 hl.bind(mainMod .. " + " .. "R", hl.dsp.exec_cmd("wofi --show drun"))
+
+hl.bind(mainMod .. " + " .. "I", hl.dsp.exec_cmd("~/.config/rofi/powermenu.sh"))
 
 hl.bind(mainMod .. " + " .. "P", hl.dsp.window.pseudo())
 
