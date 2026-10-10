@@ -141,7 +141,7 @@ hl.config({
 		allow_tearing = false,
 		layout = "dwindle",
 		col = {
-			active_border = "rgba(FFFFFFFF)",
+			active_border = "rgba(250, 189, 47, 0.9)",
 			inactive_border = "rgba(595959aa)",
 		},
 	},
@@ -504,7 +504,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
-	hl.exec_cmd("hyprctl setcursor 'Capitaine Cursors (Gruvbox)' 22")
+	hl.exec_cmd("hyprctl setcursor 'oreo_spark_orange_cursors' 20")
 end)
 
 hl.window_rule({
