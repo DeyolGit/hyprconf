@@ -58,6 +58,12 @@ window#waybar {
     padding: 0 12px;
 }
 
+#memory {
+  color: #fabd2f;
+  padding: 0 4px;
+ 
+}
+
 #pulseaudio {
     color: #83a598;
     padding: 0 10px;

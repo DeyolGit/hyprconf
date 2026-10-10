@@ -10,8 +10,11 @@
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["clock"],
-  "modules-right": ["pulseaudio", "network", "bluetooth","custom/notification","custom/power","battery"],
-
+  "modules-right": ["memory", "pulseaudio", "network", "bluetooth","custom/notification","custom/power","battery"],
+  "custom/linux": {
+    "format": "",
+    "on-click": "rofi -show drun"
+  },
   "hyprland/workspaces": {
     "format": "{name}",
     "on-click": "activate",
@@ -36,14 +39,17 @@
     "on-click": "pavucontrol",
     "tooltip": false
   },
-  
+  "memory": {
+    "interval": 2,
+    "format": " {used}GB"
+  }, 
   "bluetooth": {
   "format": " ",
   "format-connected": "  {device_alias}",
   "format-disabled": "󰂲  off",
   "format-off": "󰂲  off",
   "tooltip": true,
-  "on-click": "blueman-manager"
+  "on-click": "flatpak run io.github.kaii_lb.Overskride"
 },
  "custom/notification": {
     "tooltip": false,

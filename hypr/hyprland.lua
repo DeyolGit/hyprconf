@@ -504,7 +504,7 @@ hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
-	hl.exec_cmd("hyprctl setcursor macOS 23")
+	hl.exec_cmd("hyprctl setcursor 'Capitaine Cursors (Gruvbox)' 22")
 end)
 
 hl.window_rule({
