@@ -9,11 +9,7 @@
     },
     "logo": {
     "type": "auto",
-    "source": "/home/mihailo/.config/fastfetch/logo.txt",
-    "color": {
-      "1": "39"
-    },
-  
+    "source": "MacOS"
   }, 
     "modules": [
 	"break",
