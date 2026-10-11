@@ -132,7 +132,7 @@ hl.env("HYPRCURSOR_SIZE", 24)
 hl.config({
 	general = {
 		gaps_in = 5,
-		gaps_out = 20,
+		gaps_out = 10,
 		border_size = 2,
 		-- https://wiki.hypr.land/Configuring/Variables/#variable-types for info about colors
 		-- Set to true enable resizing windows by clicking and dragging on borders and gaps
@@ -151,8 +151,8 @@ hl.config({
 
 hl.config({
 	decoration = {
-		rounding = 5,
-		rounding_power = 1,
+		rounding = 4,
+		rounding_power = 2,
 		-- Change transparency of focused and unfocused windows
 		active_opacity = 1.0,
 		inactive_opacity = 0.85,
@@ -165,10 +165,13 @@ hl.config({
 		-- https://wiki.hypr.land/Configuring/Variables/#blur
 		blur = {
 			enabled = true,
-			size = 3,
+			size = 4,
 			passes = 1,
+			variant = acrylic,
 			new_optimizations = true,
 			ignore_opacity = true,
+			vibrancy = 0.3,
+			contrast = 1.0,
 		},
 	},
 })
