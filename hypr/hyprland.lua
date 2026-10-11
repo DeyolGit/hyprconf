@@ -141,8 +141,8 @@ hl.config({
 		allow_tearing = false,
 		layout = "dwindle",
 		col = {
-			active_border = "rgba(250, 189, 47, 0.9)",
-			inactive_border = "rgba(595959aa)",
+			active_border = "#504945",
+			inactive_border = "#1d2021",
 		},
 	},
 })
