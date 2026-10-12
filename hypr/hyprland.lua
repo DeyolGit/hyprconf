@@ -59,7 +59,7 @@ local fileManager = "nautilus"
 
 local menu = "wofi --show drun"
 
-local browser = "brave-browser"
+local browser = "brave"
 
 hl.config({
 	input = {

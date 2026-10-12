@@ -49,7 +49,7 @@
   "format-disabled": "󰂲  off",
   "format-off": "󰂲  off",
   "tooltip": true,
-  "on-click": "flatpak run io.github.kaii_lb.Overskride"
+  "on-click": "overskride"
 },
  "custom/notification": {
     "tooltip": false,
