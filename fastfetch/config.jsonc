@@ -9,7 +9,15 @@
     },
     "logo": {
     "type": "auto",
-    "source": "MacOS"
+    "source": "NixOS",
+    "color": {
+      "1": "#cc241d",
+      "2": "#fe8019",
+      "3": "#d79921",
+      "4": "#b8bb26",
+      "5": "#458588",
+      "6": "#b16286",
+  },
   }, 
     "modules": [
 	"break",
