@@ -1,150 +1,115 @@
-
 configuration {
     modi: "drun,run,window";
     show-icons: true;
-
-    font: "JetBrainsMono Nerd Font 11";
-
+    display-drun: "  ";
+    display-run: " Run";
+    display-window: " Windows";
     drun-display-format: "{name}";
-    display-drun: "apps";
-    display-run: "run";
-    display-window: "windows";
-
+    disable-history: false;
     sidebar-mode: false;
-    cycle: true;
-    hover-select: false;
-    scroll-method: 0;
-
-    matching: "fuzzy";
-    case-sensitive: false;
-
-    icon-theme: "Papirus-Dark";
-
-    timeout {
-        action: "kb-cancel";
-        delay: 0;
-    }
 }
 
 * {
-    bg:        #282828e6;
-    bg-alt:    #fabd2f24;
-    fg:        #ebdbb2;
-    fg-dim:    #a89984;
-    line:      #504945;
-
-    border:    0px;
-    spacing:   0;
+    font: "JetBrainsMono Nerd Font 12";
+    background: #1e1e2e;
+    background-alt: #313244;
+    foreground: #cdd6f4;
+    selected: #cba6f7;
+    active: #a6e3a1;
+    urgent: #f38ba8;
+    border-color: #313244;
 }
 
 window {
-    width: 620px;
-    location: center;
-
-    background-color: @bg;
-
+    location: north;
+    anchor: north;
+    y-offset: 10px;
+    width: 600px;
     border: 2px;
-    border-color: #fabd2fcc;
-    border-radius: 16px;
-
-    padding: 24px;
+    border-radius: 12px;
+    padding: 12px;
+    background-color: @background;
 }
 
 mainbox {
+    background-color: @background;
     children: [ inputbar, listview ];
-    spacing: 18px;
+    spacing: 10px;
+    padding: 4px;
 }
 
 inputbar {
+    background-color: @background-alt;
+    text-color: @foreground;
+    border-radius: 8px;
+    padding: 10px;
+    spacing: 8px;
     children: [ prompt, entry ];
-
-    spacing: 12px;
-    padding: 0;
-
-    background-color: transparent;
 }
 
 prompt {
     background-color: transparent;
-    text-color: #fabd2f;
-
-    font: "JetBrainsMono Nerd Font 10";
+    text-color: @selected;
 }
 
 entry {
     background-color: transparent;
-    text-color: @fg;
-
-    cursor: text;
-
-    placeholder: "search";
-    placeholder-color: @fg-dim;
-
-    padding: 0;
+    text-color: @foreground;
+    placeholder: "Search...";
+    placeholder-color: #6c7086;
 }
 
 listview {
-    columns: 1;
-    lines: 8;
-
-    fixed-height: true;
-    dynamic: false;
-
-    scrollbar: false;
-    spacing: 2px;
-
     background-color: transparent;
+    columns: 1;
+    lines: 6;
+    spacing: 5px;
+    fixed-height: false;
+    cycle: true;
+    scrollbar: false;
 }
 
 element {
-    orientation: horizontal;
-
-    padding: 9px 10px;
-    spacing: 12px;
-
     background-color: transparent;
-    text-color: @fg;
-
-    border-radius: 9px;
+    text-color: @foreground;
+    border-radius: 8px;
+    padding: 8px;
+    spacing: 10px;
 }
 
 element normal.normal {
     background-color: transparent;
-    text-color: @fg;
+    text-color: @foreground;
 }
 
 element selected.normal {
-    background-color: @bg-alt;
-    text-color: #fabd2f;
-
-    border-radius: 9px;
+    background-color: @selected;
+    text-color: @background;
 }
 
 element alternate.normal {
+    background-color: @background;
+    text-color: @foreground;
+}
+
+element-icon {
+    size: 24px;
     background-color: transparent;
-    text-color: @fg;
 }
 
 element-text {
     background-color: transparent;
     text-color: inherit;
-
     vertical-align: 0.5;
 }
 
-element-icon {
-    size: 24px;
-
-    background-color: transparent;
-
-    vertical-align: 0.5;
+message {
+    background-color: @background-alt;
+    border-radius: 8px;
+    padding: 8px;
 }
 
-scrollbar {
-    width: 0px;
-    handle-width: 0px;
-
+textbox {
     background-color: transparent;
-    handle-color: transparent;
+    text-color: @foreground;
 }
-

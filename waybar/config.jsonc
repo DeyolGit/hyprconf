@@ -10,7 +10,7 @@
 
   "modules-left": ["hyprland/workspaces", "hyprland/window"],
   "modules-center": ["clock"],
-  "modules-right": ["memory", "pulseaudio", "network", "bluetooth","custom/notification","custom/power","battery"],
+  "modules-right": ["memory", "pulseaudio", "network", "bluetooth","battery","custom/power"],
   "custom/linux": {
     "format": "",
     "on-click": "rofi -show drun"
@@ -29,7 +29,23 @@
 
   "clock": {
     "format": "󰥔  {:%a %d %b  %H:%M}",
-    "tooltip": false
+    "tooltip": true,
+    "on-click": "swaync-client -t -sw",
+    "tooltip-format": "{:%Y %B}\n{calendar}",
+    "calendar": {
+        "mode": "month",
+        "mode-mon-col": 3,
+        "weeks-pos": "right",
+        "on-scroll": 1,
+        "on-click-right": "mode",
+        "format": {
+            "months": "{}",
+            "days": "{}",
+            "weeks": "W{}",
+            "weekdays": "{}",
+            "today": "{}"
+        }
+    },
   },
 
 

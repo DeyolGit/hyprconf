@@ -32,7 +32,7 @@ window_padding_width 4
 # cursor #dddddd
 
 # BEGIN_KITTY_THEME
-# Black Metal
+# Gruvbox Dark Hard
 include current-theme.conf
 # END_KITTY_THEME
 
@@ -43,3 +43,5 @@ bold_font        auto
 italic_font      auto
 bold_italic_font auto
 # END_KITTY_FONTS
+#
+shell fish

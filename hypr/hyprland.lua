@@ -126,9 +126,22 @@ hl.env("HYPRCURSOR_SIZE", 24)
 --####################
 
 -- Refer to https://wiki.hypr.land/Configuring/Variables/
+hl.layer_rule({
+    name = "rofi-slide-down",
+    match = {
+        namespace = "^rofi$",
+    },
+    animation = "slide top",
+})
 
+hl.layer_rule({
+    name = "swaync-slide-down",
+    match = {
+        namespace = "^swaync-control-center$",
+    },
+    animation = "slide top",
+})
 -- https://wiki.hypr.land/Configuring/Variables/#general
-
 hl.config({
 	general = {
 		gaps_in = 5,
@@ -141,8 +154,8 @@ hl.config({
 		allow_tearing = false,
 		layout = "dwindle",
 		col = {
-			active_border = "#504945",
-			inactive_border = "#1d2021",
+			active_border = "rgba(180, 190, 254, 0.6)",
+			inactive_border = "rgba(88, 91, 112, 0.6)",
 		},
 	},
 })
@@ -151,8 +164,8 @@ hl.config({
 
 hl.config({
 	decoration = {
-		rounding = 4,
-		rounding_power = 1,
+		rounding = 7,
+		rounding_power = 3,
 		-- Change transparency of focused and unfocused windows
 		active_opacity = 1.0,
 		inactive_opacity = 0.8,
@@ -505,9 +518,10 @@ hl.config({
 -- Autostart
 hl.on("hyprland.start", function()
 	hl.exec_cmd("waybar")
+  hl.exec_cmd("swaync")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
-	hl.exec_cmd("hyprctl setcursor gruvbox 23")
+	hl.exec_cmd("hyprctl setcursor cat 23")
 end)
 
 hl.window_rule({
