@@ -1,0 +1,129 @@
+
+/* Everforest Dark — Waybar */
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 12px;
+    font-weight: bold;
+    min-height: 0;
+    border: none;
+    border-radius: 0;
+}
+
+window#waybar {
+    background: transparent;
+    color: #d3c6aa;
+}
+
+/* Module containers */
+.modules-left,
+.modules-center,
+.modules-right {
+    background: rgba(45, 53, 59, 0.94);
+    border: 1px solid #475258;
+    border-radius: 12px;
+    padding: 0 8px;
+}
+
+/* Workspaces */
+#workspaces {
+    padding: 2px;
+}
+
+#workspaces button {
+    color: #859289;
+    background: transparent;
+    padding: 0 9px;
+    margin: 3px 0;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+#workspaces button:hover {
+    background: #475258;
+    color: #d3c6aa;
+}
+
+#workspaces button.active {
+    color: #2d353b;
+    background: #a7c080;
+}
+
+#workspaces button.urgent {
+    color: #2d353b;
+    background: #e67e80;
+}
+
+/* Window title */
+#window {
+    color: #859289;
+    padding: 5px;
+}
+
+/* System modules */
+#clock {
+    color: #a7c080;
+    padding: 0 12px;
+}
+
+#memory {
+    color: #d699b6;
+    padding: 0 4px;
+}
+
+#pulseaudio {
+    color: #7fbbb3;
+    padding: 0 10px;
+}
+
+#network {
+    color: #a7c080;
+    padding: 0 10px;
+}
+
+#battery {
+    color: #83c092;
+    padding: 0 10px;
+}
+
+#battery.warning {
+    color: #dbbc7f;
+}
+
+#battery.critical {
+    color: #e67e80;
+}
+
+/* Tray and tooltip */
+#tray {
+    padding: 0 8px;
+}
+
+tooltip {
+    background: #343f44;
+    color: #d3c6aa;
+    border: 1px solid #56635f;
+    border-radius: 8px;
+}
+
+/* Bluetooth */
+#bluetooth {
+    color: #7fbbb3;
+    padding: 0 4px;
+    font-size: 14px;
+}
+
+/* Custom modules */
+#custom-power {
+    color: #e67e80;
+    padding: 0 6px;
+    margin: 4px;
+}
+
+#custom-notification {
+    color: #dbbc7f;
+    padding: 0 4px;
+    margin: 4px;
+    font-size: 13px;
+}
+

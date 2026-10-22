@@ -1,0 +1,112 @@
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    
+    "display": {
+        "separator": " ",
+        "color": {
+      "title": "green",
+    }, 
+    },
+    "logo": {
+    "type": "auto",
+    "source": "NixOS",
+    "color": {
+      "1": "green",
+      "2": "yellow",
+      "3": "green",
+      "4": "yellow",
+      "5": "green",
+      "6": "yellow",
+  },
+  }, 
+    "modules": [
+	"break",
+	{
+            "type": "title",
+            "keyWidth": 10,
+            "keyColor": "green"
+        },
+        "break",
+        {
+            "type": "os",
+            "key": " ",
+            "keyColor": "green",  // = color4
+        },
+        {
+            "type": "kernel",
+            "key": " ",
+            "keyColor": "green",
+        },
+        {
+            "type": "packages",
+            "format": "{} (pacman)",
+            "key": " ",
+            "keyColor": "green",  
+        },
+        {
+            "type": "shell",
+            "key": " ",
+            "keyColor": "green", 
+        },
+        {
+            "type": "terminal",
+            "key": " ",
+            "keyColor": "green", 
+        },
+        {
+            "type": "wm",
+            "key": " ",
+            "keyColor": "green", 
+        },
+        {
+            "type": "display",
+            "key": " ",
+            "keyColor": "green"
+        },
+        {
+            "type": "cpu",
+            "format": "{1}",
+            "key": " ",
+            "keyColor": "green"
+        },
+        {
+            "type": "gpu",
+            "format": "{2}",
+            "key": " ",
+            "keyColor": "green"
+        },
+        {
+            "type": "gpu",
+            "format": "{3}",
+            "key": " ",
+            "keyColor": "green"
+        },
+        {
+             "type": "memory",
+            "key": "﬙ ",
+            "keyColor": "green"
+        },
+        {
+             "type": "swap",
+            "key": "󰾴 ",
+            "keyColor": "green"
+        },
+        {
+            "type": "disk",
+            "key": " ",
+            "keyColor": "green"
+        },
+        {
+            "type": "uptime",
+            "key": " ",
+            "keyColor": "green", 
+        },
+        {
+            "type": "command",
+            "key": "󱦟 ",
+            "keyColor": "green",
+            "text": "birth_install=$(stat -c %W /); current=$(date +%s); time_progression=$((current - birth_install)); days_difference=$((time_progression / 86400)); echo $days_difference days"
+        },
+        "break",
+    ]
+}

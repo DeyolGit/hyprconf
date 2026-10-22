@@ -1,0 +1,322 @@
+
+/* =========================================
+   Everforest Dark — SwayNC
+   Matching compact Rofi theme
+   ========================================= */
+
+* {
+    font-family: "JetBrainsMono Nerd Font";
+    font-size: 12px;
+    font-weight: bold;
+    transition: 180ms ease;
+}
+
+/* Everforest palette */
+@define-color bg           #2d353b;
+@define-color bg_alt       #343f44;
+@define-color bg_hover     #3d484d;
+@define-color bg_selected  #a7c080;
+@define-color fg           #d3c6aa;
+@define-color fg_muted     #859289;
+@define-color green        #a7c080;
+@define-color green_soft   #83c092;
+@define-color yellow       #dbbc7f;
+@define-color red          #e67e80;
+@define-color border       #475258;
+
+/* Global surfaces */
+.control-center,
+.notification-window,
+.floating-notifications {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+/* Notification center panel */
+.control-center {
+    background: @bg;
+    border: 1px solid @border;
+    border-radius: 15px;
+    padding: 10px;
+    color: @fg;
+}
+
+/* Header */
+.widget-title {
+    color: @fg;
+    background: transparent;
+    margin: 0 0 6px 0;
+    padding: 4px 2px;
+    font-size: 12px;
+}
+
+.widget-title > button {
+    color: @bg;
+    background: @green;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 9px;
+}
+
+.widget-title > button:hover {
+    background: @green_soft;
+}
+
+/* Do not disturb */
+.widget-dnd {
+    background: @bg_alt;
+    color: @fg;
+    border: 1px solid @border;
+    border-radius: 8px;
+    padding: 7px 9px;
+    margin: 4px 0;
+}
+
+.widget-dnd > switch {
+    background: @bg_hover;
+    border: 1px solid @border;
+    border-radius: 999px;
+}
+
+.widget-dnd > switch:checked {
+    background: @green;
+}
+
+.widget-dnd > switch slider {
+    background: @fg;
+    border-radius: 999px;
+}
+
+/* Quick action buttons */
+.widget-buttons-grid {
+    background: transparent;
+    padding: 2px 0;
+    margin: 3px 0;
+    font-size: 13px;
+
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button {
+    background: @bg_alt;
+    color: @fg;
+        border: 1px solid @border;
+    border-radius: 8px;
+    min-width: 34px;
+    min-height: 34px;
+    padding: 5px;
+    margin: 2px;
+}
+
+.widget-buttons-grid > flowbox > flowboxchild > button:hover {
+    background: @green;
+    color: @bg;
+    border-color: @green;
+}
+
+/* Media player */
+.widget-mpris {
+    background: @bg_alt;
+    color: @fg;
+    border: 1px solid @border;
+    border-radius: 10px;
+    padding: 8px;
+    margin: 4px 0;
+}
+
+.widget-mpris-player {
+    background: transparent;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.widget-mpris-title {
+    color: @fg;
+    font-size: 11px;
+}
+
+.widget-mpris-subtitle {
+    color: @fg_muted;
+    font-size: 10px;
+}
+
+.widget-mpris button {
+    background: transparent;
+    color: @green;
+    border: none;
+    border-radius: 6px;
+    padding: 4px;
+}
+
+.widget-mpris button:hover {
+    background: @bg_hover;
+    color: @fg;
+}
+
+/* Volume */
+.widget-volume {
+    background: @bg_alt;
+    color: @fg;
+    border: 1px solid @border;
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin: 4px 0;
+}
+
+.widget-volume label {
+    color: @green;
+}
+
+scale trough {
+    background: @bg_hover;
+    border-radius: 999px;
+    min-height: 5px;
+}
+
+scale highlight {
+    background: @green;
+    border-radius: 999px;
+}
+
+scale slider {
+    background: @fg;
+    border: none;
+    border-radius: 999px;
+    min-width: 10px;
+    min-height: 10px;
+}
+
+/* Individual notifications */
+.notification {
+    background: @bg_alt;
+    color: @fg;
+    border: 1px solid @border;
+    border-radius: 10px;
+    padding: 0;
+    margin: 4px 0;
+}
+
+.notification-content {
+    background: transparent;
+    color: @fg;
+    padding: 8px;
+}
+
+.notification-default-action,
+.notification-action {
+    background: transparent;
+    color: @fg;
+    border: none;
+}
+
+.notification-default-action:hover,
+.notification-action:hover {
+    background: @bg_hover;
+}
+
+.summary {
+    color: @fg;
+    font-size: 11px;
+}
+
+.body {
+    color: @fg_muted;
+    font-size: 10px;
+}
+
+.time {
+    color: @fg_muted;
+    font-size: 9px;
+}
+
+.image {
+    border-radius: 6px;
+}
+
+.app-name {
+    color: @green;
+    font-size: 10px;
+}
+
+/* Notification action buttons */
+.notification-action {
+    border-top: 1px solid @border;
+    border-radius: 0 0 8px 8px;
+    padding: 6px;
+}
+
+.notification-action:hover {
+    color: @green;
+}
+
+/* Close button */
+.close-button {
+    background: @bg_hover;
+    color: @fg_muted;
+    border: none;
+    border-radius: 6px;
+    padding: 3px;
+    margin: 4px;
+}
+
+.close-button:hover {
+    background: @red;
+    color: @bg;
+}
+
+/* Scrollbars */
+scrollbar,
+scrollbar trough,
+
+scrollbar slider {
+      background: transparent;
+    border: none;
+    min-width: 0;
+    min-height: 0;
+    opacity: 0;
+    box-shadow: none;
+}
+
+/* Empty state */
+.notification-row {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.blank-window {
+    background: transparent;
+}
+
+/* Calendar, if enabled later */
+.widget-calendar {
+    background: @bg_alt;
+    color: @fg;
+    border: 1px solid @border;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+.widget-calendar:selected {
+    background: @green;
+    color: @bg;
+}
+
+.widget-calendar button {
+    color: @fg;
+    background: transparent;
+    border-radius: 6px;
+}
+
+.widget-calendar button:hover {
+    background: @bg_hover;
+}
+
+/* Tooltips */
+tooltip {
+    background: @bg_alt;
+    color: @fg;
+    border: 1px solid @border;
+    border-radius: 6px;
+}
+
