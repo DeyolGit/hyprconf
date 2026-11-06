@@ -53,7 +53,7 @@ hl.monitor({
 
 -- Set programs that you use
 
-local terminal = "kitty"
+local terminal = "alacritty"
 
 local fileManager = "nautilus"
 
@@ -131,7 +131,7 @@ hl.layer_rule({
     match = {
         namespace = "^rofi$",
     },
-    animation = "slide top",
+    animation = "popin",
 })
 
 hl.layer_rule({
@@ -154,8 +154,8 @@ hl.config({
 		allow_tearing = false,
 		layout = "dwindle",
 		col = {
-			active_border = "#a7c080cc",
-			inactive_border = "#475258cc",
+		  active_border = "#a7c080cc",
+			inactive_border = "#475258cc",	
 		},
 	},
 })
@@ -164,8 +164,8 @@ hl.config({
 
 hl.config({
 	decoration = {
-		rounding = 7,
-		rounding_power = 3,
+		rounding = 10,
+		rounding_power = 2,
 		-- Change transparency of focused and unfocused windows
 		active_opacity = 1.0,
 		inactive_opacity = 0.8,
@@ -348,8 +348,8 @@ local mainMod = "SUPER"
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Binds/ for more
 
-hl.bind(mainMod .. " + " .. "X", hl.dsp.exec_cmd("kitty"))
-hl.bind(mainMod .. " + " .. "H", hl.dsp.exec_cmd("swaync-client -t"))
+hl.bind(mainMod .. " + " .. "X", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + " .. "H", hl.dsp.exec_cmd("hyprctl dispatch 'hl.dsp.global(\"quickshell:controlCenter\")'"))
 hl.bind("CTRL" .. " + " .. "Q", hl.dsp.window.close())
 
 hl.bind(mainMod .. " + " .. "M", hl.dsp.exit())
@@ -358,13 +358,13 @@ hl.bind(mainMod .. " + " .. "P", hl.dsp.exec_cmd("systemctl suspend"))
 
 hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd("nautilus"))
 
-hl.bind(mainMod .. " + " .. "D", hl.dsp.exec_cmd("rofi -show"))
+hl.bind(mainMod .. " + " .. "D", hl.dsp.exec_cmd("hyprctl dispatch 'hl.dsp.global(\"quickshell:appLauncher\")'"))
 
 hl.bind(mainMod .. " + " .. "V", hl.dsp.window.float())
 
 hl.bind(mainMod .. " + " .. "R", hl.dsp.exec_cmd("wofi --show drun"))
 
-hl.bind(mainMod .. " + " .. "I", hl.dsp.exec_cmd("~/.config/rofi/powermenu.sh"))
+hl.bind(mainMod .. " + " .. "I", hl.dsp.exec_cmd("hyprctl dispatch 'hl.dsp.global(\"quickshell:powermenu\")'"))
 
 hl.bind(mainMod .. " + " .. "P", hl.dsp.window.pseudo())
 
@@ -504,10 +504,23 @@ hl.window_rule({
 	suppress_event = "maximize",
 })
 
+hl.window_rule({
+    match = { class = "Alacritty" },
+    float = true,
+    center = true,
+    size = "1000 650",
+})
+
 hl.config({
 	general = {
 		gaps_in = 5,
-		gaps_out = 10,
+		gaps_in = 5,
+	  gaps_out = {
+            left = 10,
+            right = 10,
+            top = 50,
+            bottom = 10,
+        },	
 	},
 })
 
@@ -517,8 +530,7 @@ hl.config({
 
 -- Autostart
 hl.on("hyprland.start", function()
-	hl.exec_cmd("waybar")
-  hl.exec_cmd("swaync")
+	hl.exec_cmd("quickshell")
 	hl.exec_cmd("hyprpaper")
 	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
 	hl.exec_cmd("hyprctl setcursor macOS 24")
