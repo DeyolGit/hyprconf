@@ -10,8 +10,6 @@ import QtQuick.Controls
 import Quickshell.Widgets
 
 
-
-
 Item {
   id: appLauncher
   anchors.fill: parent
@@ -24,7 +22,6 @@ Item {
     list.currentIndex = 0
     field.forceActiveFocus()
   }
-
    // apps listed here come first, in this order (match the name shown in the launcher, case doesn't matter)
   property var pinned: [
     "freesm launcher",
@@ -81,7 +78,7 @@ Item {
   Rectangle {
     anchors.fill: parent
     radius: 16
-    color: "#2d353b"
+    color: Colors.bg0
 
     // search box
     Rectangle {
@@ -89,7 +86,7 @@ Item {
       anchors { top: parent.top; left: parent.left; right: parent.right; margins: 10 }
       height: 30
       radius: 8
-      color: "#272e33"
+      color: Colors.bg1
 
       TextInput {
         id: field
@@ -158,7 +155,7 @@ Item {
         width: list.width
         height: 28
         radius: 8
-        color: ListView.isCurrentItem ? "#a7c080" : "transparent"
+        color: ListView.isCurrentItem ? Colors.green: "transparent"
 
          Image {
           id: icon

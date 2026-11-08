@@ -1,387 +1,584 @@
 import Quickshell
-import Quickshell.Wayland
-import Quickshell.Hyprland
-import QtQuick
-import QtQuick.Layouts
 import Quickshell.Io
 import Quickshell.Services.Mpris
 import Quickshell.Bluetooth
-import QtQuick.Controls
 import Quickshell.Widgets
-
+import QtQuick
+import QtQuick.Effects
+import QtQuick.Layouts
 
 Item {
-       Process {
-    id: volumeSetter
-    command: ["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", controlCenter.volume.toFixed(2)]
-  }
+    id: controlCenter
+    anchors.fill: parent
+    visible: root.expanded && !root.launcher && !root.powermenu
+    z: 10
+    clip: true
 
-  Timer {
-                              id: pickerDelay
-                               interval: 250
-                              repeat: false
+    // ---------- state ----------
+    property bool dnd: false
+    property bool nightLight: false
+    property bool wifiOn: true
+    property string wifiName: ""
+    property string sinkName: "Audio output"
+    property real volume: 0.88
+    property real brightness: 1.0
+    property bool showBrightness: true      // set false on a desktop PC
 
-                             onTriggered: {
-                                  Quickshell.execDetached(["hyprpicker"])
-                                   }
-                             }
-        id: controlCenter
+    readonly property var btAdapter: Bluetooth.defaultAdapter
+
+    // ---------- tile data (index 0..4) ----------
+    readonly property var tileIcons: ["\uf1eb", "\uf028", "\uf294", "\uf1f6", "\uf186"]
+    readonly property var tileTitles: ["Wi-Fi", "Audio", "Bluetooth", "Peace", "Night Light"]
+
+    function tileActive(i) {
+        switch (i) {
+        case 0: return wifiOn;
+        case 1: return true;
+        case 2: return btAdapter ? btAdapter.enabled : false;
+        case 3: return dnd;
+        default: return nightLight;
+        }
+    }
+
+    function tileSub(i) {
+        switch (i) {
+        case 0: return wifiOn ? (wifiName !== "" ? wifiName : "Not connected") : "Off";
+        case 1: return sinkName;
+        case 2: return tileActive(2) ? "On" : "Off";
+        case 3: return dnd ? "On" : "Off";
+        default: return nightLight ? "On" : "Off";
+        }
+    }
+
+    function tileClick(i, right) {
+        switch (i) {
+        case 0:
+            Quickshell.execDetached(["nmcli", "radio", "wifi", wifiOn ? "off" : "on"]);
+            wifiOn = !wifiOn;
+            refreshSoon.restart();
+            break;
+        case 1:
+            refresh();
+            break;
+        case 2:
+            if (right) {
+                root.expanded = false;
+                Quickshell.execDetached(["overskride"]);
+            } else if (btAdapter) {
+                btAdapter.enabled = !btAdapter.enabled;
+            }
+            break;
+        case 3:
+            dnd = !dnd;
+            Quickshell.execDetached(["dunstctl", "set-paused", dnd ? "true" : "false"]);
+            break;
+        case 4:
+            nightLight = !nightLight;
+            if (nightLight)
+                Quickshell.execDetached(["hyprsunset", "-t", "4000"]);
+            else
+                Quickshell.execDetached(["pkill", "hyprsunset"]);
+            break;
+        }
+    }
+
+    function setSlider(i, v) {
+        if (i === 0) {
+            volume = v;
+            volTimer.restart();
+        } else {
+            brightness = v;
+            brightTimer.restart();
+        }
+    }
+
+    function refresh() {
+        volGet.running = true;
+        sinkGet.running = true;
+        wifiGet.running = true;
+        if (showBrightness)
+            brightGet.running = true;
+    }
+    onVisibleChanged: if (visible) refresh()
+    Component.onCompleted: refresh()
+
+    // ---------- readers ----------
+    Process {
+        id: volGet
+        command: ["wpctl", "get-volume", "@DEFAULT_AUDIO_SINK@"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const v = parseFloat(text.split(" ")[1]);
+                if (!isNaN(v))
+                    controlCenter.volume = Math.min(1, v);
+            }
+        }
+    }
+
+    Process {
+        id: sinkGet
+        command: ["sh", "-c", "wpctl inspect @DEFAULT_AUDIO_SINK@ | grep -m1 node.description | cut -d'\"' -f2"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const s = text.trim();
+                if (s !== "")
+                    controlCenter.sinkName = s;
+            }
+        }
+    }
+
+    Process {
+        id: wifiGet
+        // line 1: enabled/disabled, line 2: connected SSID (if any)
+        command: ["sh", "-c", "nmcli radio wifi; nmcli -t -f active,ssid dev wifi | grep '^yes' | head -1 | cut -d: -f2"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const lines = text.split("\n");
+                controlCenter.wifiOn = lines[0].trim() === "enabled";
+                controlCenter.wifiName = lines.length > 1 ? lines[1].trim() : "";
+            }
+        }
+    }
+
+    Process {
+        id: brightGet
+        command: ["brightnessctl", "-m"]
+        stdout: StdioCollector {
+            onStreamFinished: {
+                const p = parseInt(text.split(",")[3]);
+                if (!isNaN(p))
+                    controlCenter.brightness = p / 100;
+            }
+        }
+    }
+
+    // ---------- setters (debounced while dragging) ----------
+    Timer {
+        id: volTimer
+        interval: 50
+        onTriggered: Quickshell.execDetached(["wpctl", "set-volume", "@DEFAULT_AUDIO_SINK@", controlCenter.volume.toFixed(2)])
+    }
+
+    Timer {
+        id: brightTimer
+        interval: 50
+        onTriggered: Quickshell.execDetached(["brightnessctl", "set", Math.max(1, Math.round(controlCenter.brightness * 100)) + "%"])
+    }
+
+    Timer {
+        id: refreshSoon
+        interval: 700
+        onTriggered: controlCenter.refresh()
+    }
+
+    Timer {
+        id: pickerDelay
+        interval: 250
+        onTriggered: Quickshell.execDetached(["hyprpicker"])
+    }
+
+    // ---------- background ----------
+    Rectangle {
         anchors.fill: parent
-        visible: root.expanded && !root.launcher && !root.powermenu 
-        z: 10
-        clip: true
-        property bool dnd: false
-        property real volume: 0.88
-        property bool playing: false
+        color: Colors.bg0
+        radius: 22
+    }
 
-        Rectangle {
-            anchors.fill: parent
-            color: root.colBg 
-            radius: 22
-            clip: true
-            width: 500
-            height: 386
-            Column {
-                anchors.fill: parent
-                anchors.margins: 12
-                spacing: 10
+    ColumnLayout {
+        anchors.fill: parent
+        anchors.margins: 12
+        spacing: 10
 
-                // DO NOT DISTURB
-                Rectangle {
-                    width: parent.width
-                    height: 48
-                    radius: 10
-                    color: "#394349"
-                    border.color: "#465258"
+        // HEADER: back button, title, quick actions
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.preferredHeight: 40
+            spacing: 10
 
-                    Text {
-                        anchors.left: parent.left
-                        anchors.leftMargin: 14
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "Do Not Disturb"
-                        color: "#ffffff"
-                        font.pixelSize: 13
+            Rectangle {
+                Layout.preferredWidth: 36
+                Layout.preferredHeight: 36
+                radius: 18
+                color: Colors.bg2
+
+                Text {
+                    anchors.centerIn: parent
+                    text: "\uf060"
+                    font.family: "Symbols Nerd Font"
+                    font.pixelSize: 14
+                    color: Colors.fg
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: root.expanded = false
+                }
+            }
+
+            Text {
+                text: "Control Center"
+                font.pixelSize: 15
+                font.bold: true
+                color: Colors.fg
+            }
+
+            Item { Layout.fillWidth: true }
+
+            // launcher, power menu, htop, screenshot, color picker
+            Repeater {
+                model: ["\uf011", "\uf080", "\uf030", "\uf1fb"]
+
+                delegate: Rectangle {
+                    required property string modelData
+                    required property int index
+
+                    Layout.preferredWidth: 32
+                    Layout.preferredHeight: 32
+                    radius: 16
+                    color: actionHover.hovered ? Colors.selection : Colors.bg2
+                    Behavior on color {
+                        ColorAnimation { duration: 150 }
                     }
 
-                    Rectangle {
-                        anchors.right: parent.right
-                        anchors.rightMargin: 12
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: 44
-                        height: 24
-                        radius: 20
-                        color: controlCenter.dnd
-                            ? "#a6bf80" : "#566168"
+                    Text {
+                        anchors.centerIn: parent
+                        text: modelData
+                        font.family: "Symbols Nerd Font"
+                        font.pixelSize: 13
+                        color: actionHover.hovered ? Colors.bg0 : Colors.fg
+                    }
+
+                    HoverHandler { id: actionHover }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            switch (index) {
+
+                            case 0:
+                                root.expanded = false;
+                                root.powermenu = true;
+                                root.launcher = false;
+                                break;
+                            case 1:
+                                root.expanded = false;
+                                Quickshell.execDetached(["alacritty", "-e", "htop"]);
+                                break;
+                            case 2:
+                                root.expanded = false;
+                                Quickshell.execDetached(["hyprshot", "-m", "region"]);
+                                break;
+                            case 3:
+                                root.expanded = false;
+                                pickerDelay.start();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // TILES: 6-column grid, first two tiles span 3 columns, the rest span 2
+        Item {
+            id: grid
+            Layout.fillWidth: true
+            Layout.preferredHeight: 44 * 2 + 10
+            readonly property real gap: 10
+            readonly property real cell: (width - 2 * gap) / 3
+
+            Repeater {
+                model: 5
+
+                delegate: Rectangle {
+                    id: tile
+                    required property int index
+                    readonly property int span: index === 1 ? 2 : 1
+                    readonly property int col: index < 2 ? index : index - 2
+                    readonly property int row: index < 2 ? 0 : 1
+                    readonly property bool active: controlCenter.tileActive(index)
+
+                    x: col * (grid.cell + grid.gap)
+                    y: row * (44 + grid.gap)
+                    width: grid.cell * span + grid.gap * (span - 1)
+                    height: 44
+                    radius: 16
+                    color: active ? Colors.selection : Colors.bg2
+                    Behavior on color {
+                        ColorAnimation { duration: 150 }
+                    }
+
+                    RowLayout {
+                        anchors.fill: parent
+                        anchors.leftMargin: 8
+                        anchors.rightMargin: 8
+                        spacing: 8
 
                         Rectangle {
-                            x: controlCenter.dnd ? 23 : 3
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 18
-                            height: 18
-                            radius: 10
-                            color: "#ffffff"
+                            Layout.preferredWidth: 28
+                            Layout.preferredHeight: 28
+                            radius: 14
+                            color: tile.active ? Qt.rgba(0, 0, 0, 0.12) : Colors.bg3
 
-                            Behavior on x {
-                                NumberAnimation { duration: 150 }
+                            Text {
+                                anchors.centerIn: parent
+                                text: controlCenter.tileIcons[tile.index]
+                                font.family: "Symbols Nerd Font"
+                                font.pixelSize: 13
+                                color: tile.active ? Colors.bg0 : Colors.fg
                             }
                         }
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: controlCenter.dnd =
-                                !controlCenter.dnd
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            spacing: 0
+
+                            Text {
+                                Layout.fillWidth: true
+                                text: controlCenter.tileTitles[tile.index]
+                                font.pixelSize: 11
+                                font.bold: true
+                                color: tile.active ? Colors.bg0 : Colors.fg
+                                elide: Text.ElideRight
+                            }
+                            Text {
+                                Layout.fillWidth: true
+                                text: controlCenter.tileSub(tile.index)
+                                font.pixelSize: 9
+                                color: tile.active ? Qt.alpha(Colors.bg0, 0.7) : Qt.alpha(Colors.fg, 0.6)
+                                elide: Text.ElideRight
+                            }
                         }
                     }
-                }
 
-                // QUICK ACTIONS
-               Row {
-    width: parent.width
-    height: 48
-    spacing: 8
-
-    Repeater {
-        model: [" ", "󰐥", "", "", "󰂯", ""]
-
-        delegate: Rectangle {
-            required property var modelData
-            required property int index
-
-            property bool active: false
-
-            width: (controlCenter.width - 65) / 6
-            height: 46
-            radius: 9
-            color: active ? "#4a5a4c" : "#394349"
-            border.color: "#4b575c"
-            
-            HoverHandler {
-              onHoveredChanged: parent.color = hovered ? "#a6bf80" : "#394349"
-            }
-             Behavior on color {
-                ColorAnimation { duration: 150 }
-              }
-            Text {
-                anchors.centerIn: parent
-                text: modelData
-                color: parent.active ? "#a6bf80" : "#d5cbb1"
-                font.pixelSize: 14
-                font.family: "Font Awesome"
-            }
-
-            MouseArea {
-                anchors.fill: parent
-                cursorShape: Qt.PointingHandCursor
-
-                onClicked: {
-                    switch (index) {
-                      case 0:
-                            powermenu = false
-                            expanded = false
-                            launcher = true
-                           break 
-
-                      case 1:
-                            expanded = false
-                            powermenu = true
-                            launcher = false
-                            break
-
-                        case 2:
-                            expanded = false
-                            Quickshell.execDetached(["alacritty", "-e", "htop"]) 
-                            break
-
-                        case 3:
-                            expanded = false
-                            Quickshell.execDetached(["hyprshot", "-m", "region"])
-                            break
-
-                        case 4:
-                            expanded = false
-                            Quickshell.execDetached(["overskride"])
-                            break
-
-                        case 5:
-                            expanded = false
-                            
-                            pickerDelay.start() 
-                            break
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        acceptedButtons: Qt.LeftButton | Qt.RightButton
+                        onClicked: mouse => controlCenter.tileClick(tile.index, mouse.button === Qt.RightButton)
                     }
                 }
             }
         }
-    }
-} 
 
-                               
-// MEDIA PLAYER
-Rectangle {
-    id: mediaPlayer
+        // SLIDERS: index 0 = volume, index 1 = brightness
+        Repeater {
+            model: controlCenter.showBrightness ? 2 : 1
 
-    property var player: Mpris.players.values.length > 0
-                         ? Mpris.players.values[0] : null
+            delegate: Rectangle {
+                id: sl
+                required property int index
+                readonly property real val: index === 0 ? controlCenter.volume : controlCenter.brightness
 
-    width: parent.width
-    height: 180
-    radius: 12
-    color: "#394349"
-    border.color: "#465258"
+                Layout.fillWidth: true
+                Layout.preferredHeight: 36
+                radius: height / 2
+                color: Colors.bg2
 
-    // Album art
-    Rectangle {
-        x: 16
-        y: 16
-        width: 58
-        height: 58
-        radius: 10
-        clip: true
+                Rectangle {
+                    width: Math.max(parent.height, parent.width * sl.val)
+                    height: parent.height
+                    radius: height / 2
+                    color: Colors.selection
+                }
 
-        gradient: Gradient {
-            GradientStop { position: 0; color: "#a8b5a0" }
-            GradientStop { position: 0.5; color: "#716e5d" }
-            GradientStop { position: 1; color: "#353c35" }
-        }
+                Text {
+                    anchors.left: parent.left
+                    anchors.leftMargin: 16
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: sl.index === 0 ? "\uf028" : "\uf185"
+                    font.family: "Symbols Nerd Font"
+                    font.pixelSize: 16
+                    color: Colors.bg0
+                }
 
-        Text {
-            anchors.centerIn: parent
-            text: "♫"
-            color: "#eee5d0"
-            font.pixelSize: 28
-            visible: !mediaPlayer.player ||
-                     mediaPlayer.player.trackArtUrl === ""
-        }
-
-        Image {
-            anchors.fill: parent
-            source: mediaPlayer.player
-                    ? mediaPlayer.player.trackArtUrl : ""
-            fillMode: Image.PreserveAspectCrop
-            visible: mediaPlayer.player !== null &&
-                     mediaPlayer.player.trackArtUrl !== ""
-        }
-    }
-
-    // Track information
-    Column {
-        anchors.left: parent.left
-        anchors.leftMargin: 88
-        anchors.right: parent.right
-        anchors.rightMargin: 12
-        anchors.top: parent.top
-        anchors.topMargin: 23
-        spacing: 6
-
-        Text {
-            width: parent.width
-            text: mediaPlayer.player
-                  ? mediaPlayer.player.identity : "No media player"
-            color: "#a6bf80"
-            font.pixelSize: 10
-            elide: Text.ElideRight
-        }
-
-        Text {
-            width: parent.width
-            text: mediaPlayer.player
-                  ? (mediaPlayer.player.trackTitle || "Unknown Title")
-                  : "Nothing Playing"
-            color: "#eee9dc"
-            font.pixelSize: 13
-            font.bold: true
-            elide: Text.ElideRight
-        }
-
-        Text {
-            width: parent.width
-            text: mediaPlayer.player
-                  ? (mediaPlayer.player.trackArtist || "Unknown Artist")
-                  : " "
-            color: "#a6a99f"
-            font.pixelSize: 11
-            elide: Text.ElideRight
-        }
-    }
-
-    // Playback controls
-    Row {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 25
-        spacing: 42
-
-        Text {
-            text: "󰒮"
-            color: "#c5cbb9"
-            font.pixelSize: 22
-            opacity: mediaPlayer.player &&
-                    mediaPlayer.player.canGoPrevious ? 1 : 0.4
-
-            MouseArea {
-                anchors.fill: parent
-                onClicked: {
-                    if (mediaPlayer.player &&
-                        mediaPlayer.player.canGoPrevious)
-                        mediaPlayer.player.previous()
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onPressed: mouse => controlCenter.setSlider(sl.index, Math.max(0, Math.min(1, mouse.x / width)))
+                    onPositionChanged: mouse => {
+                        if (pressed)
+                            controlCenter.setSlider(sl.index, Math.max(0, Math.min(1, mouse.x / width)));
+                    }
                 }
             }
         }
 
-        Text {
-            text: mediaPlayer.player &&
-                  mediaPlayer.player.isPlaying ? "󰏤" : "󰐊"
-            color: "#a6bf80"
-            font.pixelSize: 27
+        // MEDIA PLAYER
+        ClippingRectangle {
+            id: media
+            Layout.fillWidth: true
+            Layout.preferredHeight: 120
+            radius: 22
+            color: Colors.bg2
 
-            MouseArea {
+            // prefer a player that is playing, else the first one
+            readonly property var player: {
+                const list = Mpris.players.values;
+                for (let i = 0; i < list.length; i++) {
+                    if (list[i].isPlaying)
+                        return list[i];
+                }
+                return list.length > 0 ? list[0] : null;
+            }
+            readonly property bool playing: player !== null && player.isPlaying
+            readonly property real progress: (player && player.length > 0) ? Math.min(1, player.position / player.length) : 0
+
+            // Mpris position doesn't tick by itself
+            Timer {
+                running: media.playing && controlCenter.visible
+                interval: 1000
+                repeat: true
+                triggeredOnStart: true
+                onTriggered: if (media.player) media.player.positionChanged()
+            }
+
+            // blurred album art background
+            Image {
                 anchors.fill: parent
-                enabled: mediaPlayer.player !== null &&
-                         mediaPlayer.player.canTogglePlaying
-
-                onClicked: {
-                    mediaPlayer.player.togglePlaying()
+                source: media.player ? media.player.trackArtUrl : ""
+                fillMode: Image.PreserveAspectCrop
+                asynchronous: true
+                visible: status === Image.Ready
+                layer.enabled: true
+                layer.effect: MultiEffect {
+                    blurEnabled: true
+                    blur: 1.0
+                    blurMax: 48
+                    autoPaddingEnabled: false
                 }
             }
-        }
 
-        Text {
-            text: "󰒭"
-            color: "#c5cbb9"
-            font.pixelSize: 22
-            opacity: mediaPlayer.player &&
-                    mediaPlayer.player.canGoNext ? 1 : 0.4
-
-            MouseArea {
+            // darken so text stays readable
+            Rectangle {
                 anchors.fill: parent
-                onClicked: {
-                    if (mediaPlayer.player &&
-                        mediaPlayer.player.canGoNext)
-                        mediaPlayer.player.next()
+                color: Colors.bg0
+                opacity: 0.5
+            }
+
+            // output device line
+            Row {
+                x: 16
+                y: 10
+                spacing: 6
+                Text {
+                    text: "\uf027"
+                    font.family: "Symbols Nerd Font"
+                    font.pixelSize: 10
+                    color: Qt.alpha(Colors.fg, 0.8)
+                }
+                Text {
+                    width: media.width - 60
+                    text: controlCenter.sinkName
+                    font.pixelSize: 10
+                    color: Qt.alpha(Colors.fg, 0.8)
+                    elide: Text.ElideRight
+                }
+            }
+
+            // title + artist
+            Column {
+                x: 16
+                y: 34
+                width: media.width - 16 - 76
+                spacing: 2
+
+                Text {
+                    width: parent.width
+                    text: media.player ? (media.player.trackTitle || "Unknown title") : "Nothing playing"
+                    font.pixelSize: 15
+                    font.bold: true
+                    font.capitalization: Font.AllUppercase
+                    color: Colors.fg
+                    elide: Text.ElideRight
+                }
+                Text {
+                    width: parent.width
+                    text: media.player ? (media.player.trackArtist || "Unknown artist") : ""
+                    font.pixelSize: 11
+                    color: Qt.alpha(Colors.fg, 0.8)
+                    elide: Text.ElideRight
+                }
+            }
+
+            // big play/pause button
+            Rectangle {
+                anchors.right: parent.right
+                anchors.rightMargin: 16
+                y: 30
+                width: 46
+                height: 46
+                radius: 23
+                color: Colors.fg
+                opacity: media.player ? 1 : 0.4
+
+                Text {
+                    anchors.centerIn: parent
+                    text: media.playing ? "\uf04c" : "\uf04b"
+                    font.family: "Symbols Nerd Font"
+                    font.pixelSize: 16
+                    color: Colors.bg0
+                }
+                MouseArea {
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    enabled: media.player !== null && media.player.canTogglePlaying
+                    onClicked: media.player.togglePlaying()
+                }
+            }
+
+            // prev / progress / next
+            RowLayout {
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.leftMargin: 16
+                anchors.rightMargin: 16
+                anchors.bottomMargin: 12
+                height: 20
+                spacing: 10
+
+                Text {
+                    text: "\uf048"
+                    font.family: "Symbols Nerd Font"
+                    font.pixelSize: 11
+                    color: Colors.fg
+                    opacity: media.player && media.player.canGoPrevious ? 1 : 0.4
+                    MouseArea {
+                        anchors.fill: parent
+                        anchors.margins: -6
+                        onClicked: if (media.player && media.player.canGoPrevious) media.player.previous()
+                    }
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 4
+                    radius: 2
+                    color: Qt.alpha(Colors.fg, 0.3)
+
+                    Rectangle {
+                        width: parent.width * media.progress
+                        height: parent.height
+                        radius: 2
+                        color: Colors.fg
+                    }
+                }
+
+                Text {
+                    text: "\uf051"
+                    font.family: "Symbols Nerd Font"
+                    font.pixelSize: 11
+                    color: Colors.fg
+                    opacity: media.player && media.player.canGoNext ? 1 : 0.4
+                    MouseArea {
+                        anchors.fill: parent
+                        anchors.margins: -6
+                        onClicked: if (media.player && media.player.canGoNext) media.player.next()
+                    }
                 }
             }
         }
     }
 }
- 
-                // VOLUME
-                Rectangle {
-                    width: parent.width
-                    height: 55
-                    radius: 10
-                    color: "#394349"
-                    border.color: "#465258"
-                    Text {
-                        x: 13
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: "󰕾"
-                        color: "#a6bf80"
-                        font.pixelSize: 20
-                        font.family: "Symbols Nerd Font"
-                    }
-
-                    Rectangle {
-                        x: 48
-                        anchors.verticalCenter: parent.verticalCenter
-                        width: parent.width - 66
-                        height: 6
-                        radius: 5
-                        color: "#566168"
-
-                        Rectangle {
-                            width: parent.width * controlCenter.volume
-                            height: parent.height
-                            radius: 5
-                            color: "#a6bf80"
-                        }
-
-                        Rectangle {
-                            x: parent.width * controlCenter.volume - 7
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 14
-                            height: 14
-                            radius: 10
-                            color: "#e2ddca"
-                        }
-
-                       MouseArea {
-    anchors.fill: parent
-    anchors.margins: -10
-
-    function updateVolume(mouseX) {
-        controlCenter.volume = Math.max(0, Math.min(1, mouseX / width))
-        volumeSetter.running = true
-    }
-
-    onPressed: mouse => updateVolume(mouse.x)
-
-    onPositionChanged: mouse => {
-        if (pressed)
-            updateVolume(mouse.x)
-    }
-} 
-                    }
-                }
-            }
-        }
-    } 
-

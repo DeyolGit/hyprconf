@@ -22,10 +22,10 @@ Item {
   property var actions: [
     { label: "Shutdown", icon: "\uf011", cmd: ["systemctl", "poweroff"] },
     { label: "Reboot",   icon: "\uf021", cmd: ["systemctl", "reboot"] },
+     { label: "Suspend",  icon: "\uf186", cmd: ["systemctl", "suspend"] },
     { label: "Lock",     icon: "\uf023", cmd: ["hyprlock"] },
     { label: "Logout",   icon: "\uf08b", cmd: ["hyprctl", "dispatch", "exit"] },
-    { label: "Suspend",  icon: "\uf186", cmd: ["systemctl", "suspend"] },
-    { label: "Cancel",   icon: "\uf05e", cmd: [] }
+       { label: "Cancel",   icon: "\uf05e", cmd: [] }
   ]
 
   function run(a) {
@@ -52,7 +52,7 @@ Item {
   Rectangle {
     anchors.fill: parent
     radius: 16
-    color: "#2d353b"
+    color: Colors.bg0
 
     // takes the keyboard input
     Item {
@@ -99,7 +99,7 @@ Item {
         width: list.width
         height: 28
         radius: 8
-        color: ListView.isCurrentItem ? "#a7c080" : "transparent"
+        color: ListView.isCurrentItem ? Colors.green : "transparent"
 
         Text {
           id: ico
