@@ -146,7 +146,7 @@ hl.config({
 	general = {
 		gaps_in = 5,
 		gaps_out = 5,
-		border_size = 2,
+		border_size = 0,
 		-- https://wiki.hypr.land/Configuring/Variables/#variable-types for info about colors
 		-- Set to true enable resizing windows by clicking and dragging on borders and gaps
 		resize_on_border = false,
@@ -164,8 +164,8 @@ hl.config({
 
 hl.config({
 	decoration = {
-		rounding = 10,
-		rounding_power = 2,
+		rounding = 25,
+		rounding_power = 8,
 		-- Change transparency of focused and unfocused windows
 		active_opacity = 1.0,
 		inactive_opacity = 0.8,
@@ -532,7 +532,7 @@ hl.config({
 hl.on("hyprland.start", function()
 	hl.exec_cmd("quickshell")
 	hl.exec_cmd("hyprpaper")
-	hl.exec_cmd("/usr/lib/polkit-kde-authentication-agent-1")
+  hl.exec_cmd("dunst")
 	hl.exec_cmd("hyprctl setcursor macOS 24")
 end)
 
