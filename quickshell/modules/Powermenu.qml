@@ -99,7 +99,7 @@ Item {
         width: list.width
         height: 28
         radius: 8
-        color: ListView.isCurrentItem ? Colors.green : "transparent"
+        color: ListView.isCurrentItem ? Colors.selection : "transparent"
 
         Text {
           id: ico
@@ -111,7 +111,7 @@ Item {
           text: row.modelData.icon
           font.family: powerMenu.iconFont
           font.pixelSize: 14
-          color: row.ListView.isCurrentItem ? "#2d353b" : "#d3c6aa"
+          color: row.ListView.isCurrentItem ? Colors.bg2 : Colors.fg
         }
 
         Text {
@@ -120,7 +120,7 @@ Item {
           anchors.verticalCenter: parent.verticalCenter
           text: row.modelData.label
           font.pixelSize: 14
-          color: row.ListView.isCurrentItem ? "#2d353b" : "#d3c6aa"
+          color: row.ListView.isCurrentItem ? Colors.bg2 : Colors.fg
         }
 
         MouseArea {

@@ -10,4 +10,5 @@ import "modules"
 
 ShellRoot {
   Bar {}
+  Wallpaper {}
 }

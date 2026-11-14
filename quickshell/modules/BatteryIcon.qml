@@ -35,8 +35,8 @@ Item {
         layer.effect: MultiEffect {
             brightness: 1.0
             colorization: 1.0
-            colorizationColor: battery.charging ? Colors.green
-                             : battery.level <= 20 ? Colors.green
+            colorizationColor: battery.charging ? Colors.selection
+                             : battery.level <= 20 ? Colors.selection
                              : battery.tint
         }
 

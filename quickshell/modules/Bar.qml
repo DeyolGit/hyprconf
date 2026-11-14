@@ -17,14 +17,14 @@ PanelWindow {
   implicitHeight: 400
   exclusionMode: ExclusionMode.Ignore
   WlrLayershell.layer: WlrLayer.Top
-     WlrLayershell.keyboardFocus: (root.launcher || root.powermenu || root.expanded) ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
-  
+  WlrLayershell.keyboardFocus: (root.launcher || root.powermenu || root.expanded || root.volumeBar) ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None  
    surfaceFormat.opaque: false
   //EXPANDED
   property bool expanded: false
   property bool launcher: false
   property bool powermenu: false
   property bool hover: false
+  property bool volumeBar: false
 
     anchors {
       top: true
@@ -45,7 +45,7 @@ PanelWindow {
 
     Shortcut {
     sequence: "Escape"
-    onActivated: root.expanded = false,launcher = false, powermenu = false
+    onActivated: root.expanded = false,launcher = false, powermenu = false, volumeBar = false
     }
     
     property string fontFamily: "Inter"
@@ -62,6 +62,7 @@ PanelWindow {
       expanded = !expanded
       launcher = false
       powermenu = false
+      volumeBar = false
     }
 } 
 
@@ -72,6 +73,7 @@ GlobalShortcut {
       launcher = !launcher
       powermenu = false
       expanded = false
+      volumeBar = false
     }
   }
 
@@ -81,10 +83,22 @@ GlobalShortcut {
     onPressed: {
       launcher = false
       expanded = false
+      volumeBar = false
       powermenu = !powermenu
     }
   }
 
+GlobalShortcut {
+    name: "volumeBar"
+    
+    onPressed: {
+      launcher = false
+      expanded = false
+      volumeBar = !volumeBar
+      powermenu = false
+      hover = false
+    }
+  }
       
     
    
@@ -102,8 +116,8 @@ GlobalShortcut {
     Rectangle {
 
       id: pill
-       width: hover ? 470: powermenu ? 250: launcher ? 480: expanded ? 500:130
-       height: hover ? 80: powermenu ? 210: launcher ? 245: expanded ? 386:36 
+       width: volumeBar ? 350: hover ? 470: powermenu ? 250: launcher ? 480: expanded ? 500:130
+       height: volumeBar ? 45: hover ? 80: powermenu ? 210: launcher ? 245: expanded ? 386:36 
       
 
         
@@ -123,7 +137,7 @@ GlobalShortcut {
       MouseArea {
         anchors.fill: parent
         hoverEnabled: true
-        enabled: !launcher && !expanded && !powermenu
+        enabled: !launcher && !expanded && !powermenu && !volumeBar
         onEntered: hover = true
         onExited: hover = false
       }
@@ -142,17 +156,20 @@ GlobalShortcut {
        Hover {}
 
         //EXPANDED
-
-      Expanded {}
+    Expanded {}
 
       //APP launcher
       AppLauncher {}
 
       //Powermenu 
       Powermenu {}
+
+      //VolumeBar
+VolumeBar {}
+
     Item {
       anchors.horizontalCenter: parent.horizontalCenter 
-      visible: !launcher && !expanded && !powermenu && !hover 
+      visible: !launcher && !expanded && !powermenu && !hover && !volumeBar
       anchors.fill: parent
     
         RowLayout {

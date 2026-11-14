@@ -24,12 +24,15 @@ Item {
   }
    // apps listed here come first, in this order (match the name shown in the launcher, case doesn't matter)
   property var pinned: [
-    "freesm launcher",
     "visual studio code",
     "discord",
+    "viber",
+    "spotify",
     "localsend",
-    "cyberpunk 2077",
-    "stremio"
+    "stremio",
+    "steam",
+    "Cyberpunk 2077",
+    "Bloodborne"
   ]
 
   function rank(a) {
@@ -94,8 +97,8 @@ Item {
         anchors.leftMargin: 12
         anchors.rightMargin: 12
         verticalAlignment: TextInput.AlignVCenter
-        color: "#d3c6aa"
-        selectionColor: "#a7c080"
+        color: Colors.fg
+        selectionColor: Colors.selection
         selectedTextColor: "#2d353b"
         font.pixelSize: 14
         clip: true
@@ -155,7 +158,7 @@ Item {
         width: list.width
         height: 28
         radius: 8
-        color: ListView.isCurrentItem ? Colors.green: "transparent"
+        color: ListView.isCurrentItem ? Colors.selection : "transparent"
 
          Image {
           id: icon
