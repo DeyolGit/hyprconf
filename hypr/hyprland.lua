@@ -360,6 +360,9 @@ hl.bind(mainMod .. " + " .. "E", hl.dsp.exec_cmd("nautilus"))
 
 hl.bind(mainMod .. " + " .. "D", hl.dsp.exec_cmd("hyprctl dispatch 'hl.dsp.global(\"quickshell:appLauncher\")'"))
 
+hl.bind("CTRL" .. " + " .. mainMod .. " + " .. "C", hl.dsp.exec_cmd("hyprctl dispatch 'hl.dsp.global(\"quickshell:volumeBar\")'"))
+
+
 hl.bind(mainMod .. " + " .. "V", hl.dsp.window.float())
 
 hl.bind(mainMod .. " + " .. "R", hl.dsp.exec_cmd("wofi --show drun"))
@@ -531,7 +534,6 @@ hl.config({
 -- Autostart
 hl.on("hyprland.start", function()
 	hl.exec_cmd("quickshell")
-	hl.exec_cmd("hyprpaper")
   hl.exec_cmd("dunst")
 	hl.exec_cmd("hyprctl setcursor macOS 24")
 end)
