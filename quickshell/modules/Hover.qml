@@ -55,7 +55,7 @@ Timer {
     anchors.horizontalCenter: parent.horizontalCenter
     anchors.topMargin: 4
     text: Qt.formatDateTime(sysClock.date, "ddd, d MMM")
-    color: Colors.fg
+    color: '#888888'
     font { family: root.fontFamily; pixelSize: 11; bold: false }
     
  
