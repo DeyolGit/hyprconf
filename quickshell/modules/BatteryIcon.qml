@@ -5,7 +5,7 @@ import Quickshell.Services.UPower
 
 Item {
     id: battery
-    property int size: 24
+    property int size: 28
     property color tint: "#cdd6f4"
 
     readonly property string iconDir: "icons/battery/"
@@ -26,7 +26,7 @@ Item {
 
     Image {
         anchors.fill: parent
-        source: Quickshell.shellPath(battery.iconDir + battery.level + ".svg")
+        source: Quickshell.shellPath(iconDir + "100.svg")
         sourceSize.width: battery.size * 2
         sourceSize.height: battery.size * 2
         fillMode: Image.PreserveAspectFit
@@ -35,12 +35,25 @@ Item {
         layer.effect: MultiEffect {
             brightness: 1.0
             colorization: 1.0
-            colorizationColor: battery.charging ? Colors.selection
-                             : battery.level <= 20 ? Colors.selection
-                             : battery.tint
+            colorizationColor: hover2.hovered ? Colors.bg2 : Colors.selection
+            Behavior on colorizationColor { ColorAnimation { duration: 150 } }
         }
 
+        
     }
 
-    
+    // percentage on top; a sibling of the Image, so the tint doesn't touch it
+    Text {
+        anchors.centerIn: parent
+        z: 1
+        anchors.verticalCenterOffset: 0.5
+        anchors.horizontalCenterOffset: -1
+        //text: Math.round(battery.pct)
+        text: "100"
+        color: hover2.hovered ? Colors.selection : Colors.bg2
+        Behavior on color { ColorAnimation { duration: 150 } }
+        font.pixelSize: Math.round(battery.size * 0.39)
+        font.bold: true
+        font.family: "Inter"
+    }
 }

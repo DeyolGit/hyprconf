@@ -64,34 +64,40 @@ Timer {
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         property bool controlHover: false
-        width: 65
+        width: 70
         height: 30
         border.width: 1
         radius: 10
         border.color: Colors.bg4
+        Behavior on color { ColorAnimation { duration: 150 } }
         anchors.rightMargin: 20
-        color: Colors.bg2
+        color: hover2.hovered ? Colors.selection : Colors.bg2
+        HoverHandler {
+        id: hover2
+        }
         MouseArea {
           anchors.fill: parent
           onClicked: root.expanded = true
           cursorShape: Qt.PointingHandCursor
+          
         }
         Image {
           id: wifi
           z: 10
           anchors.left: parent.left
-          anchors.leftMargin: 3
+          anchors.leftMargin: 5
           anchors.bottom: parent.bottom
           anchors.bottomMargin: 5
           source: "file:///home/mihailo/.config/quickshell/icons/wifi.svg"
-          sourceSize.width: 26
-          sourceSize.height: 26
+          sourceSize.width: 27
+          sourceSize.height: 27
           fillMode: Image.PreserveAspectFit
           layer.enabled: true
           layer.effect: MultiEffect {
               brightness: 1.0
               colorization: 1.0
-              colorizationColor: Colors.selection
+              colorizationColor: hover2.hovered ? Colors.bg2 : Colors.selection
+              Behavior on colorizationColor { ColorAnimation { duration: 150 } }
               
             }
         }

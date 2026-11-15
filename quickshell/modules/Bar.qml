@@ -134,13 +134,12 @@ GlobalShortcut {
            easing.type: Easing.OutCubic
          } 
        }  
-      MouseArea {
-        anchors.fill: parent
-        hoverEnabled: true
-        enabled: !launcher && !expanded && !powermenu && !volumeBar
-        onEntered: hover = true
-        onExited: hover = false
-      }
+      HoverHandler {
+    id: pillHover
+    enabled: !launcher && !expanded && !powermenu && !volumeBar
+    onHoveredChanged: hover = hovered
+    onEnabledChanged: if (!enabled) hover = false
+}
       radius: 20
       anchors {
         top: parent.top
